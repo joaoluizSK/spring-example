@@ -1,0 +1,30 @@
+@CHARSET "UTF-8";
+
+.navbar-brand {
+	padding-top: 12px;
+}
+
+.icone-menu {
+	height: 35px;
+	width: 35px;
+}
+
+.panel-default {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.alert {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.td-link-panel {
+    float: right;
+    padding: 0px;
+}
+
+.td-titulo-panel {
+    float: left;
+    padding-top: 2px;
+}
