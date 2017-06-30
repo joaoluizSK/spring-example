@@ -3,6 +3,8 @@ package br.com.twodo.controller;
 import br.com.twodo.model.StatusTitulo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,15 +26,21 @@ public class TituloController {
 	@RequestMapping("/novo")
 	public ModelAndView novo(){
 	    ModelAndView mv = new ModelAndView("CadastroTitulo");
+	    mv.addObject(new Titulo());
 	    mv.addObject("todosStatusTitulo", StatusTitulo.values());
 		return mv;
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public ModelAndView salvar(Titulo titulo){
+	public ModelAndView salvar(@Validated Titulo titulo, Errors errors){
 
-		tituloRepository.save(titulo);
-		ModelAndView mav = new ModelAndView("CadastroTitulo");
+        ModelAndView mav = new ModelAndView("CadastroTitulo");
+        if(errors.hasErrors()){
+            return mav;
+        }
+
+        tituloRepository.save(titulo);
+
         mav.addObject("mensagem", "Título salvo com sucesso!");
 		return mav;
 	}
