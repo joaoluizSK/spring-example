@@ -5,12 +5,7 @@
 
     <div class="alert alert-success" th:if="${!#strings.isEmpty(mensagem)}">
         <button type="button" class="close"></button>
-        <span>Título salvo com sucesso!</span>
-    </div>
-    <div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
-        <div th:each="detailedError: ${#fields.detailedErrors()}">
-            <span th:text="${detailedError.message}"></span>
-        </div>
+        <span th:text="${mensagem}">Título salvo com sucesso!</span>
     </div>
 
 </html>
