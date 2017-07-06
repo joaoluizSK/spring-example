@@ -2,6 +2,7 @@ package br.com.twodo.controller;
 
 import br.com.twodo.model.StatusTitulo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -42,10 +43,16 @@ public class TituloController {
             return CADASTRO_VIEW;
         }
 
-        tituloRepository.save(titulo);
+        try{
 
-        attributes.addFlashAttribute("mensagem", "Título salvo com sucesso!");
-		return "redirect:/titulos/novo";
+            tituloRepository.save(titulo);
+
+            attributes.addFlashAttribute("mensagem", "Título salvo com sucesso!");
+            return "redirect:/titulos/novo";
+        } catch (DataIntegrityViolationException e){
+            errors.rejectValue("dataVencimento",null, "Formato da data inválido!");
+            return CADASTRO_VIEW;
+        }
 	}
 
 	@RequestMapping
