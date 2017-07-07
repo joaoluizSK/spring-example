@@ -1,6 +1,7 @@
 package br.com.twodo.controller;
 
 import br.com.twodo.model.StatusTitulo;
+import br.com.twodo.service.TituloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -26,7 +27,7 @@ public class TituloController {
     private static final String CADASTRO_VIEW = "CadastroTitulo";
 
 	@Autowired
-	private TituloRepository tituloRepository;
+    private TituloService tituloService;
 
 	@RequestMapping("/novo")
 	public ModelAndView novo(){
@@ -45,12 +46,12 @@ public class TituloController {
 
         try{
 
-            tituloRepository.save(titulo);
+            tituloService.salvar(titulo);
 
             attributes.addFlashAttribute("mensagem", "Título salvo com sucesso!");
             return "redirect:/titulos/novo";
-        } catch (DataIntegrityViolationException e){
-            errors.rejectValue("dataVencimento",null, "Formato da data inválido!");
+        } catch (IllegalArgumentException e){
+            errors.rejectValue("dataVencimento",null, e.getMessage());
             return CADASTRO_VIEW;
         }
 	}
@@ -58,7 +59,7 @@ public class TituloController {
 	@RequestMapping
     public ModelAndView pesquisar(){
         ModelAndView mav = new ModelAndView("PesquisaTitulos");
-	    List<Titulo> todos = tituloRepository.findAll();
+	    List<Titulo> todos = tituloService.listarTodos();
 	    mav.addObject("titulos",todos);
 
 	    return mav;
@@ -73,7 +74,7 @@ public class TituloController {
 
     @RequestMapping(value="{codigo}",method = RequestMethod.DELETE)
     public String excluir(@PathVariable Long codigo, RedirectAttributes attributes){
-        tituloRepository.delete(codigo);
+        tituloService.excluir(codigo);
         attributes.addFlashAttribute("mensagem", "Título removido com sucesso!");
 		return "redirect:/titulos";
 	}
