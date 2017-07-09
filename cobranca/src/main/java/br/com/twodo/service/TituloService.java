@@ -1,5 +1,6 @@
 package br.com.twodo.service;
 
+import br.com.twodo.model.StatusTitulo;
 import br.com.twodo.model.Titulo;
 import br.com.twodo.repository.TituloRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,17 @@ public class TituloService {
 
     public void excluir(Long codigo){
         tituloRepository.delete(codigo);
+    }
+
+    public String receber(Long codigo){
+        Titulo titulo = tituloRepository.findOne(codigo);
+        titulo.setStatus(StatusTitulo.RECEBIDO);
+        tituloRepository.save(titulo);
+        return titulo.getStatus().getDescricao();
+    }
+
+    public List<Titulo> listarTituloPorDescricao(String descricao){
+        return tituloRepository.findByDescricaoContaining(descricao);
     }
 
 }

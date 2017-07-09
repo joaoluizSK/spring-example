@@ -1,5 +1,17 @@
 @CHARSET "UTF-8";
 
+@media (min-width: 768px) {
+	.alert {
+		margin-left: 10px;
+		margin-right: 10px;
+	}
+
+	.panel-default {
+		margin-left: 10px;
+		margin-right: 10px;
+	}
+}
+
 .navbar-brand {
 	padding-top: 12px;
 }
@@ -7,16 +19,6 @@
 .icone-menu {
 	height: 35px;
 	width: 35px;
-}
-
-.panel-default {
-	margin-left: 10px;
-	margin-right: 10px;
-}
-
-.alert {
-	margin-left: 10px;
-	margin-right: 10px;
 }
 
 .td-link-panel {

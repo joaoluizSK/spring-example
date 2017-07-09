@@ -1,19 +1,15 @@
 package br.com.twodo.controller;
 
 import br.com.twodo.model.StatusTitulo;
+import br.com.twodo.repository.filter.TituloFilter;
 import br.com.twodo.service.TituloService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import br.com.twodo.model.Titulo;
-import br.com.twodo.repository.TituloRepository;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -57,9 +53,12 @@ public class TituloController {
 	}
 
 	@RequestMapping
-    public ModelAndView pesquisar(){
+    public ModelAndView pesquisar(@ModelAttribute("filtro") TituloFilter filtro){
         ModelAndView mav = new ModelAndView("PesquisaTitulos");
-	    List<Titulo> todos = tituloService.listarTodos();
+
+        String descricao = filtro.getDescricao() == null ? "%" : filtro.getDescricao();
+
+	    List<Titulo> todos = tituloService.listarTituloPorDescricao(descricao);
 	    mav.addObject("titulos",todos);
 
 	    return mav;
@@ -70,6 +69,11 @@ public class TituloController {
         ModelAndView mv = new ModelAndView(CADASTRO_VIEW);
         mv.addObject("titulo",titulo);
         return mv;
+    }
+
+    @RequestMapping(value = "/{codigo}/receber", method = RequestMethod.PUT)
+    public @ResponseBody String receber(@PathVariable Long codigo){
+        return tituloService.receber(codigo);
     }
 
     @RequestMapping(value="{codigo}",method = RequestMethod.DELETE)

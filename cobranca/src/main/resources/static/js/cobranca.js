@@ -21,4 +21,30 @@ $('#confirmacaoExclusaoModal').on('show.bs.modal', function(event){
 $(function () {
     $('[rel="tooltip"]').tooltip();
     $('.js-currency').maskMoney({ allowZero: true, thousands:'.', decimal:','});
+    $('.js-atualizar-status').on('click', function(event){
+        event.preventDefault();
+
+        var botaoReceber = $(event.currentTarget);
+
+        var urlReceber = botaoReceber.attr('href');
+
+        var response = $.ajax({
+            url:urlReceber,
+            type: 'PUT'
+        });
+
+        response.done(function(valorRetorno){
+            var codigoTitulo = botaoReceber.data('codigo');
+            $('[data-role=' + codigoTitulo + ']').html('<span class="label label-success">'+ valorRetorno +'</span>');
+
+            botaoReceber.hide();
+        });
+
+        response.fail(function(valorRetorno){
+            console.log(valorRetorno);
+            alert("Erro recebendo cobrança!");
+        });
+
+
+    });
 });
